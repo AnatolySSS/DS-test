@@ -1,0 +1,72 @@
+services:
+
+  client:
+    container_name: test-clien-dev
+    image: test/clien-dev
+    restart: on-failure
+    build:
+      context: .
+      dockerfile: ./docker/client/Dockerfile
+      target: dev
+    ports:
+      - "3000:3000" # Проброс порта для среды разработки
+    environment:
+      NODE_ENV: dev
+      AUTH_SERVICE_URL: http://backend:3010
+    volumes:
+      - ./client:/app
+      - /app/node_modules # это для того, чтобы node_modules не удалялись в контейнере
+    networks:
+      - dev-network
+    command: ["npm", "start"]
+
+  server:
+    container_name: test-server-dev
+    image: test/server-dev
+    restart: on-failure
+    build:
+      context: .
+      dockerfile: ./docker/server/Dockerfile
+      target: dev
+    ports:
+      - "3010:3010" # Проброс порта для среды разработки
+    environment:
+      NODE_ENV: dev
+    volumes:
+      - ./server:/app
+      - /app/node_modules # это для того, чтобы node_modules не удалялись в контейнере
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - dev-network
+    command: ["dockerize", "-wait", "tcp://db:3306", "-timeout", "60s", "npm", "run", "dev"]
+  
+  db:
+    container_name: test-db-dev
+    image: mysql
+    restart: on-failure
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DEV_DB}
+      MYSQL_USER: ${DEV_USER}
+      MYSQL_PASSWORD: ${DEV_PASS}
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}"]
+      interval: 1s
+      timeout: 10s
+      retries: 10
+    ports:
+      - "${DEV_PORT}:3306"
+    volumes:
+      - test-data:/var/lib/mysql
+    networks:
+      - dev-network
+
+volumes:
+  test-data:
+    driver: local
+    
+networks:
+  dev-network:
+    driver: bridge

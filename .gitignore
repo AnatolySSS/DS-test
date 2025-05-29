@@ -1,0 +1,28 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+client/node_modules
+server/node_modules
+
+client/.env
+server/.env
+server/.env.prod
+server/.env.dev
+.env
+.env.prod
+.env.dev
+
+backups
+
+# testing
+coverage
+client/coverage
+server/coverage
+
+# misc
+.DS_Store
+.vscode
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
