@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const URL_HOME = "http://localhost:3010";
+// const URL_HOME = "http://localhost:3010";
 const URL_SITE = "http://5.129.195.79:3010";
 
 const instance = axios.create({
