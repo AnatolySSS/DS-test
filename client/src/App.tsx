@@ -116,7 +116,7 @@ const App: React.FC = () => {
         fetchItems(search, nextPage);
       }
     },
-    [loading, hasMore, items.length, page, search, initialLoad, fetchItems]
+    [loading, hasMore, items.length, page, search, fetchItems]
   );
 
   const toggleSelect = async (itemId: number) => {
