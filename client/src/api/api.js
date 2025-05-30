@@ -1,10 +1,11 @@
 import axios from "axios";
 
 const URL_HOME = "http://localhost:3010";
+const URL_SITE = "http://5.129.195.79:3010";
 
 const instance = axios.create({
   withCredentials: true,
-  baseURL: `${URL_HOME}/api`,
+  baseURL: `${URL_SITE}/api`,
 });
 
 export const DataAPI = {

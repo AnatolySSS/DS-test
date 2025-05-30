@@ -12,7 +12,7 @@ services:
       - "3000:3000" # Проброс порта для среды разработки
     environment:
       NODE_ENV: dev
-      AUTH_SERVICE_URL: http://backend:3010
+      AUTH_SERVICE_URL: http://server:3010
     volumes:
       - ./client:/app
       - /app/node_modules # это для того, чтобы node_modules не удалялись в контейнере
